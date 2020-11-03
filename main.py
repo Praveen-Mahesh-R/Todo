@@ -1,16 +1,27 @@
 import PySimpleGUI as sg
 
-l=[ ]
+def add_task(values):
+    task = values['taskname']
+    todolist.append(task)
+    window.FindElement('taskname').Update(value="")
+    window.FindElement('todolist').Update(values=todolist)
+    window.FindElement('add_save').Update('Add')
+
+todolist=[]
 layout = [
-    [sg.Text('Enter your name'),sg.InputText("", key='name')],
-    [sg.Button("Add"),sg.Button('Exit')],
+    [sg.Text('Enter the task'),sg.InputText("", key='taskname'),
+    sg.Button("Add",key="add_save")],
+    [sg.Listbox(values=[], size=(30,10), key='todolist')],
+
 ]
-window = sg.Window('My first GUI', layout)
+window = sg.Window('TodoList', layout)
 while True:
     button, values = window.Read()
-    if button == 'Add':
-        l.append(values['name'])
-        window.FindElement('name').Update("")
-    elif button == 'Exit':
-        sg.Popup('Names are:', l)
+    if button == 'add_save':
+        add_task(values)
+    #elif button == 'Exit':
+    #    sg.Popup('Names are:',
+    #    break
+    else:
         break
+window.Close()
